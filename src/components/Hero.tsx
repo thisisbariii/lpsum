@@ -87,10 +87,8 @@ export default function Hero() {
           Experience bespoke interiors crafted for timeless elegance
         </p>
         <button
-          ref={ctaRef}
           onClick={scrollToContact}
-          className="relative px-12 py-5 bg-transparent border-2 border-white text-white text-sm uppercase tracking-widest font-semibold rounded-lg hover:bg-amber-500 hover:border-amber-500 hover:shadow-2xl hover:shadow-amber-500/50 hover:scale-105 transition-all duration-1000 cursor-pointer"
-          style={{ opacity: 0, transform: 'translateY(16px)' }}
+          className="px-12 py-3 bg-transparent border-2 border-white text-white text-sm uppercase tracking-widest font-semibold rounded-lg hover:bg-amber-500 hover:border-amber-500 transition-all duration-300"
         >
           Book a Showroom Visit
         </button>
