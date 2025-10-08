@@ -1,37 +1,34 @@
 import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    console.log('Hero component mounted');
-    console.log('Refs:', { 
-      title: titleRef.current, 
-      subtitle: subtitleRef.current, 
-      cta: ctaRef.current 
-    });
-
-    // Animate elements on mount
-    const animateElement = (el: HTMLElement | null, delay: number, name: string) => {
-      if (el) {
-        console.log(`Animating ${name} with delay ${delay}ms`);
-        setTimeout(() => {
-          el.style.opacity = '1';
-          el.style.transform = 'translateY(0px)';
-          console.log(`${name} animated`, el.style);
-        }, delay);
-      } else {
-        console.error(`${name} ref is null!`);
-      }
-    };
-
-    animateElement(titleRef.current, 300, 'title');
-    animateElement(subtitleRef.current, 600, 'subtitle');
-    animateElement(ctaRef.current, 900, 'button');
+    const ctx = gsap.context(() => {
+      gsap.from('.hero-title', {
+        opacity: 0,
+        y: 50,
+        duration: 1.2,
+        delay: 0.3,
+        ease: 'power3.out',
+      });
+      gsap.from('.hero-subtitle', {
+        opacity: 0,
+        y: 30,
+        duration: 1,
+        delay: 0.6,
+        ease: 'power3.out',
+      });
+      gsap.from('.hero-cta', {
+        opacity: 0,
+        y: 20,
+        duration: 0.8,
+        delay: 0.9,
+        ease: 'power3.out',
+      });
+    }, heroRef);
 
     const handleScroll = () => {
       if (contentRef.current) {
@@ -41,19 +38,13 @@ export default function Hero() {
     };
 
     window.addEventListener('scroll', handleScroll);
+
     return () => {
+      ctx.revert();
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  const scrollToContact = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      alert('Contact section coming soon!');
-    }
-  };
 
   return (
     <section
@@ -61,7 +52,6 @@ export default function Hero() {
       ref={heroRef}
       className="relative h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -69,29 +59,17 @@ export default function Hero() {
             'url(https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1920)',
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
       </div>
 
-      {/* Content */}
       <div ref={contentRef} className="relative z-10 text-center px-6 max-w-4xl">
-        <h1 
-          ref={titleRef}
-          className="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-6 leading-tight opacity-0 transform translate-y-12 transition-all duration-1000 ease-out"
-        >
+        <h1 className="hero-title text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-6 leading-tight">
           Where Luxury Finds Its Home
         </h1>
-        <p 
-          ref={subtitleRef}
-          className="text-lg md:text-2xl text-white text-opacity-90 mb-10 font-light tracking-wide opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
-        >
+        <p className="hero-subtitle text-xl md:text-2xl text-white/90 mb-10 font-light tracking-wide">
           Experience bespoke interiors crafted for timeless elegance
         </p>
-        <button
-          onClick={scrollToContact}
-          className="px-12 py-3 bg-transparent border-2 border-white text-white text-sm uppercase tracking-widest font-semibold rounded-lg hover:bg-amber-500 hover:border-amber-500 transition-all duration-300"
-        >
-          Book a Showroom Visit
-        </button>
+        
       </div>
     </section>
   );
